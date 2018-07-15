@@ -13,27 +13,46 @@ import java.util.*;
  */
 public class Part {
     
-    private static int Codigo = 0; 
+    private static int codigo = 0; 
     
-    public int Id;
-    public String Nome;
-    public String Descricao;
-    public ArrayList<SubPart> Componentes;
-    public boolean Primitive;
-    public int Quantidade;
+    public int id;
+    public String nome;
+    public String descricao;
+    public Vector<Part> componentes;
+    public boolean primitive;
+    public int quantidade;
     
-    public Part(String Nome, String Descricao, int Quantidade, boolean Primitive){       
-        this.Id = Codigo++;
-        this.Nome = Nome;
-        this.Descricao = Descricao;   
-        Componentes = new ArrayList<SubPart>();
+    /* Criar peças (primitiva ou não) sem especificar componentes */
+    public Part(String nome, String descricao, int quantidade, boolean primitive){       
+        this.id = codigo++;
+        this.nome = nome;
+        this.descricao = descricao;
+        this.primitive = primitive;
+        this.componentes = new Vector<Part>();
+    }
+
+    /* Criar peças composta a partir de componentes */
+    public Part(String nome, String descricao, int quantidade, Part[] componentes){
+        this(nome, descricao, quantidade, false);
+        this.componentes = new Vector<Part>(Arrays.asList(componentes));
+    }
+    /* Criar peças primitivas */
+    public Part(String nome, String descricao, int quantidade){
+        this(nome, descricao, quantidade, true);
+    }
+    /* Criar uma única peça primitiva */
+    public Part(String nome, String descricao){
+        this(nome, descricao, 1, true);
     }
     
-    public void InsertComponents(SubPart p){ 
-        if(!this.Primitive){
-            Componentes.add(p);
+    public synchronized void insertComponent(Part p){ 
+        if(!this.primitive){
+            componentes.add(p);
         }
     }
-    
+
+    public String toString() {
+      return nome;
+  }
     
 }

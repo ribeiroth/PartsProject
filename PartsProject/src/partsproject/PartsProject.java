@@ -5,10 +5,6 @@
  */
 package partsproject;
 
-/**
- *
- * @author ufabc
- */
 public class PartsProject {
 
     /**

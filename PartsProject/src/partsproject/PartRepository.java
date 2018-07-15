@@ -4,13 +4,43 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.*;
 
-public interface PartRepository extends Remote{
+/**
+ *
+ * @author ufabc
+ */
+public class PartRepository implements PartRepositoryInterface {
+  
+  private Vector<Part> partList; //Usar vector que é sincronizado?
+  
+  public PartRepository(Part[] parts) {
+    partList = new Vector<Part>(Arrays.asList(parts));
+  }
 
-    public void CreateRepo() throws RemoteException;
-    public void InsertPart(Part p) throws RemoteException;
-    public void GetPart(int id) throws RemoteException;
-    public void ListParts() throws RemoteException;
-    
+  public PartRepository() {
+    partList = new Vector<Part>();
+  }
+  
+  public void addPart(Part part) {
+      partList.add(part);
+  }
+  
+  public synchronized Part getPart(int id) { 
+    Iterator<Part> parts = partList.iterator();
+    while (parts.hasNext()) {
+      Part part = parts.next();
+      if (part.id == id)
+        return part;
+    }
+    return null;
+  }
+  
+  public Part[] getList() {
+    return (Part[]) partList.toArray();
+  }
+
+  public String toString() {
+      return partList.toString();
+  }
+  
+  
 }
-
-//CRIA SERVIDORES QUE CONTÉM UM REPOSITÓRIO DE PEÇAS
