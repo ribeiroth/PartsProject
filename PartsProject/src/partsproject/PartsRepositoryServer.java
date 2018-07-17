@@ -21,7 +21,7 @@ public class PartsRepositoryServer {
         PartRepositoryInterface repoDist = (PartRepositoryInterface) UnicastRemoteObject.exportObject(newRepo, 0);
 
         Registry registry = LocateRegistry.createRegistry(ServerPort);
-        registry.bind("newRepo", newRepo);
+        registry.bind(ServerName, repoDist);
         System.out.printf("Server disponivel: %s%n", newRepo);
     }catch (RemoteException ex) {
             System.out.println("Houve um erro: " + ex.getMessage());
