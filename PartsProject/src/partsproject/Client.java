@@ -4,19 +4,25 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.*;
 
 
 public class Client implements ClientInterface {
     
- public static void main(String[] args)  {
-          System.out.printf("começou Cliente");
-      Client cliente  = new Client("alynne",4200);
+    public PartRepositoryInterface servicoRemoto;
+    public Part pecaAtual;
+    
+    public static void main(String[] args)  {
+        System.out.printf("começou Cliente");
+        Client cliente  = new Client("alynne",4200);
     }
     
     
     public Client(String serverName, int serverPort) {
         try {
-              System.out.printf("Entrou");
+            
+            System.out.printf("Entrou");
+            
             String nomeServico = serverName;
             int porta = serverPort;
 
@@ -24,7 +30,7 @@ public class Client implements ClientInterface {
            // ClientInterface clientDistribuido = (ClientInterface) UnicastRemoteObject.exportObject(client, 0);
 
             Registry registry = LocateRegistry.getRegistry(porta);
-            PartRepositoryInterface servicoRemoto = (PartRepositoryInterface) registry.lookup(nomeServico);
+            this.servicoRemoto = (PartRepositoryInterface) registry.lookup(nomeServico);
             Part part = new Part("teste1","testeteste",1,true);
           //  servicoRemoto.addPart(part); // precisa implementar isso
             
@@ -46,32 +52,41 @@ public class Client implements ClientInterface {
 
     @Override
     public Part[] listp() throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.servicoRemoto.getList();
     }
 
     @Override
     public Part getp(int id) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.pecaAtual = this.servicoRemoto.getPart(id); 
+        return this.pecaAtual;
     }
 
     @Override
     public void showp() throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.out.println("Id: "+this.pecaAtual.getId());
+        System.out.println("Nome: "+this.pecaAtual.getNome());
+        System.out.println("Descrição: "+this.pecaAtual.getDescricao());
+        //System.out.println(); listar subcomponentes 
     }
 
     @Override
     public void clearlist() throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates. 
     }
 
     @Override
     public void addsubpart(int n) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(this.pecaAtual != null){
+            Part novaPeca = this.pecaAtual;
+            novaPeca.quantidade = n;
+            this.servicoRemoto.addPart(novaPeca);
+        }
     }
 
     @Override
-    public void addp(String repositoryName) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void addp(Part p) throws RemoteException {
+        p.componentes = this.pecaAtual.componentes;
+        this.servicoRemoto.addPart(p); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
