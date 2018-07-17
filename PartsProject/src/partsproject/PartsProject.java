@@ -5,13 +5,16 @@
  */
 package partsproject;
 
+import java.rmi.AlreadyBoundException;
+
 public class PartsProject {
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
-        // TODO code application logic here
+    public static void main(String[] args) throws AlreadyBoundException {
+          System.out.printf("começou");
+       PartsRepositoryServer partReposity = new PartsRepositoryServer("alynne",4200);
     }
     
 }

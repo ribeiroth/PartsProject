@@ -14,6 +14,7 @@ public class PartsRepositoryServer {
   //TO DO: MELHORAR MENSAGEM COM NOME DO SERVER
   public PartsRepositoryServer(String name, int port) throws AlreadyBoundException{
     try {
+         System.out.printf("Entrou");
         ServerName = name;
         ServerPort = port;
 
