@@ -4,16 +4,16 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.*;
 
-/**
- *
- * @author ufabc
- */
 public class PartRepository implements PartRepositoryInterface {
   
   private Vector<Part> partList; //Usar vector que é sincronizado?
   
   public PartRepository(Part[] parts) {
     partList = new Vector<Part>(Arrays.asList(parts));
+  }
+  
+  public void ClearRepository(){
+      this.partList.clear();
   }
 
   public PartRepository() {
@@ -41,6 +41,5 @@ public class PartRepository implements PartRepositoryInterface {
   public String toString() {
       return partList.toString();
   }
-  
   
 }

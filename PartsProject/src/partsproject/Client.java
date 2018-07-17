@@ -63,23 +63,35 @@ public class Client implements ClientInterface {
 
     @Override
     public void showp() throws RemoteException {
-        System.out.println("Id: "+this.pecaAtual.getId());
-        System.out.println("Nome: "+this.pecaAtual.getNome());
-        System.out.println("Descrição: "+this.pecaAtual.getDescricao());
-        //System.out.println(); listar subcomponentes 
+        if(this.pecaAtual != null){
+            System.out.println("Id: "+this.pecaAtual.getId());
+            System.out.println("Nome: "+this.pecaAtual.getNome());
+            System.out.println("Descrição: "+this.pecaAtual.getDescricao());
+            Vector<Part> componentes = this.pecaAtual.getComponentes();
+            System.out.println("Subcomponentes: ");
+            for(Part p : componentes){
+                System.out.println("Id: "+p.id+", Nome da Peça: "+p.getNome());
+            }
+        }
+        else{
+            System.out.println("Selecione uma peça primeiro!");
+        }
     }
 
     @Override
     public void clearlist() throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates. 
+        this.servicoRemoto.ClearRepository();
     }
-
+    
     @Override
     public void addsubpart(int n) throws RemoteException {
         if(this.pecaAtual != null){
             Part novaPeca = this.pecaAtual;
             novaPeca.quantidade = n;
             this.servicoRemoto.addPart(novaPeca);
+        }
+        else{
+            System.out.println("Selecione uma peça primeiro!");
         }
     }
 
