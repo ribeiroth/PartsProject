@@ -28,6 +28,7 @@ public class PartRepository implements PartRepositoryInterface {
   }
   
   public void addPart(Part part) {
+      System.out.println(part.nome);
       partList.add(part);
   }
   

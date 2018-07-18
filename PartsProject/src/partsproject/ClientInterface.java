@@ -1,6 +1,8 @@
 
 package partsproject;
 
+import java.rmi.AccessException;
+import java.rmi.NotBoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 /**
@@ -9,8 +11,10 @@ import java.rmi.RemoteException;
  */
 public interface ClientInterface extends Remote{
     
-    public void bind (String repositoryName) throws RemoteException;
-
+   
+  
+    public void bind(Client c, String repositoryName, int port) throws RemoteException, AccessException ;
+    
     public String getn ()  throws RemoteException; //Retorna nome do repositório atual.
     
     public String listp () throws RemoteException; //Lista as peças do repositório atual.

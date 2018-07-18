@@ -77,7 +77,10 @@ public class GoClient {
                     }
                     case 7: {
                         System.out.println("Digite o nome do Repositório:");
-                        cliente.bind(ler.next());
+                        String nome = ler.next();
+                         System.out.println("Digite o número d aporta:\n");
+                        int porta = ler.nextInt();
+                      cliente.bind(cliente, nome, porta);
                     }
                 }
             } catch (Exception e) {

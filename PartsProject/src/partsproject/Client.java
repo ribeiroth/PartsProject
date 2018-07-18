@@ -1,12 +1,10 @@
 package partsproject;
 
 import java.rmi.AccessException;
-import java.rmi.AlreadyBoundException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,46 +15,64 @@ public class Client implements ClientInterface {
     protected Part pecaAtual;
     protected String serverName;
     protected int serverPort;
-    
+
     public Client(String serverName, int serverPort) {
         try {
             this.serverName = serverName;
             this.serverPort = serverPort;
-            
+
             System.out.printf("Estabelecendo conexão...");
-     
+
             Registry registry = LocateRegistry.getRegistry(serverPort);
             this.servicoRemoto = (PartRepositoryInterface) registry.lookup(serverName);
-            
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    
-    public void getRepositoryName(){
+
+    public void getRepositoryName() {
         System.out.println(this.serverName);
     }
-    
-    public int countParts() throws RemoteException{
+
+    public void setRepositoryName(String name) {
+        this.serverName = name;
+    }
+
+    public void setRepositoryPort(int port) {
+        this.serverPort = port;
+    }
+    public void setRemoteService(String nome ,int port) throws RemoteException {
+        Registry registry = LocateRegistry.getRegistry(port);
+        try {
+            this.servicoRemoto = (PartRepositoryInterface) registry.lookup(nome);
+              System.out.println("foi\n");
+        } catch (NotBoundException ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
+   }
+    public int countParts() throws RemoteException  {
         return this.servicoRemoto.size();
     }
-    
     @Override
-    public void bind(String repositoryName) throws RemoteException, AccessException {
-       Registry registry = LocateRegistry.getRegistry(repositoryName);
-       if(registry != null){
-          //TO DO
-           
-       }
+    public void bind(Client c, String repositoryName, int port) throws RemoteException, AccessException {
+        System.out.println("Repositorio Atual\n");
+        c.getRepositoryName();
+        c.setRemoteService(repositoryName, port);
+        c.setRepositoryName(repositoryName);
+        System.out.println("Repositorio novo");
+        c.getRepositoryName();
+        c.setRepositoryPort(port);
+
     }
-    
-    public void searchPartById(int id) throws RemoteException, NotBoundException{
+
+    public void searchPartById(int id) throws RemoteException, NotBoundException {
         Registry registry = LocateRegistry.getRegistry(this.serverPort);
         String[] list = registry.list();
-        for(String host : list){
+        for (String host : list) {
             PartRepositoryInterface part = (PartRepositoryInterface) registry.lookup(host);
-            if(part.getPart(id).nome != null){
-                System.out.println("A peça está no Repositório: "+ host);
+            if (part.getPart(id).nome != null) {
+                System.out.println("A peça está no Repositório: " + host);
                 break;
             }
         }
