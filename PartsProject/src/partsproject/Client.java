@@ -43,7 +43,8 @@ public class Client implements ClientInterface {
         this.serverPort = port;
     }
     public void setRemoteService(String nome ,int port) throws RemoteException {
-        Registry registry = LocateRegistry.getRegistry(port);
+        Registry registry = LocateRegistry.getRegistry(null);
+         System.out.println(Arrays.toString(registry.list())); 
         try {
             this.servicoRemoto = (PartRepositoryInterface) registry.lookup(nome);
               System.out.println("foi\n");
