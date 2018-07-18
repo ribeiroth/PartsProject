@@ -10,8 +10,10 @@ import java.rmi.RemoteException;
 public interface ClientInterface extends Remote{
     
     public void bind (String repositoryName) throws RemoteException;
+
+    public String getn ()  throws RemoteException; //Retorna nome do repositório atual.
     
-    public Part[] listp () throws RemoteException; //Lista as peças do repositório atual.
+    public String listp () throws RemoteException; //Lista as peças do repositório atual.
     
     public Part getp (int id) throws RemoteException; //Busca uma peça por código
     

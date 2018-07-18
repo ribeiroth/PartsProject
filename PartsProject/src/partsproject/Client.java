@@ -24,13 +24,65 @@ public class Client implements ClientInterface {
         }
     }
 
+    public void menu() {
+        System.out.println("Digite o código da operação que deseja realizar:");
+        Scanner ler = new Scanner(System.in);
+        int cod;
+        do {
+            System.out.println("\n1 - Exibir nome do repositório\n"
+            + "2 - Exibir número de peças no repositório\n"
+            + "3 - Listar peças no repositório\n"
+            + "4 - Buscar uma peça por código\n"
+            + "5 - Adicionar nova peça ao repositório\n"
+            + "0 - Sair\n");
+            cod = ler.nextInt();
+
+            try {
+                switch(cod) {
+                    case 1: System.out.println("Repositório: " + getn());
+                            break;
+                    case 2: System.out.println("Peças no repositório:\n" + this.servicoRemoto.size());
+                            break;
+                    case 3: System.out.println("Lista de peças no repositório:\n" + listp());
+                            break;
+                    case 4: {
+                        System.out.println("Digite o código da peça:");
+                        getp(ler.nextInt());
+                        if (this.pecaAtual != null)
+                            showp();
+                        else
+                            System.out.println("Não há peça com esse id no repostitório.");
+                        break;
+                    }
+                    case 5: {
+                        System.out.println("Digite um nome para peça:");
+                        String name = ler.next();
+                        System.out.println("Digite uma decrição para a peça:");
+                        String desc = ler.next();
+                        this.pecaAtual = new Part(name, desc);
+                        addp(pecaAtual);
+                        break;
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println("Erro: " + e.getMessage());
+            }
+            
+        } while(cod != 0);
+    }
+
     @Override
     public void bind(String repositoryName) throws RemoteException {
        
     }
 
     @Override
-    public Part[] listp() throws RemoteException {
+    public String getn() throws RemoteException {
+        return this.servicoRemoto.getName();
+    }
+
+    @Override
+    public String listp() throws RemoteException {
         return this.servicoRemoto.getList();
     }
 

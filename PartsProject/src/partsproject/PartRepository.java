@@ -6,29 +6,31 @@ import java.util.*;
 
 public class PartRepository implements PartRepositoryInterface {
   
-  private Vector<Part> partList; //Usar vector que é sincronizado?
+  private String respositoryName;
+  private Vector<Part> partList;
   
- 
-  public PartRepository(Part[] parts) {
+  public PartRepository(Part[] parts, String name) {
+    respositoryName = name;
     partList = new Vector<Part>(Arrays.asList(parts));
   }
-  
-  @Override
-  public void ClearRepository(){
-      this.partList.clear();
-  }
 
- 
-  public PartRepository() {
+  public PartRepository(String name) {
+    respositoryName = name;
     partList = new Vector<Part>();
   }
+
+  public void ClearRepository(){
+    this.partList.clear();
+}
+
+  public String getName() {
+    return respositoryName;
+  }
   
-  @Override
   public void addPart(Part part) {
       partList.add(part);
   }
   
-  @Override
   public synchronized Part getPart(int id) { 
     Iterator<Part> parts = partList.iterator();
     while (parts.hasNext()) {
@@ -39,9 +41,12 @@ public class PartRepository implements PartRepositoryInterface {
     return null;
   }
   
-  @Override
-  public Part[] getList() {
-    return (Part[]) partList.toArray();
+  public String getList() {
+    return partList.toString();
+  }
+
+  public int size() {
+    return partList.size();
   }
 
   public String toString() {

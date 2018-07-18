@@ -30,12 +30,7 @@ public class GoClient {
         
         Client cliente = new Client(serverName, port);
         
-        Part p = new Part("Parte", "blah", 2, true);
-        
-        cliente.addp(p);
-        cliente.getp(0);
-        cliente.showp();
-        //cliente.showp();
+        cliente.menu();
           
     }
     

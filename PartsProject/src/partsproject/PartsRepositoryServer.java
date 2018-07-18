@@ -19,7 +19,7 @@ public class PartsRepositoryServer {
         ServerName = name;
         ServerPort = port;
 
-        PartRepositoryInterface newRepo = new PartRepository();
+        PartRepositoryInterface newRepo = new PartRepository(name);
         PartRepositoryInterface repoDist = (PartRepositoryInterface) UnicastRemoteObject.exportObject(newRepo, 0);
 
         Registry registry = LocateRegistry.createRegistry(ServerPort);
