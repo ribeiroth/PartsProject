@@ -5,13 +5,14 @@
  */
 package partsproject;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
  *
  * @author ufabc
  */
-public class Part {
+public class Part implements Serializable{
 
     private static int codigo = 0;
 

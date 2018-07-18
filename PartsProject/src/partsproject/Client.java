@@ -11,27 +11,6 @@ public class Client implements ClientInterface {
     public PartRepositoryInterface servicoRemoto;
     public Part pecaAtual;
 
-    public static void main(String[] args) throws RemoteException {
-        
-        Scanner ler = new Scanner(System.in);
-        String serverName;
-        int port;
-        
-        System.out.println("Olá, vamos começar com a nossa conexão!");
-        
-        System.out.println("Primeiro digite o nome do servidor que deseja se conectar");
-        serverName = ler.next();
-        
-        System.out.println("Boa! Agora digite a porta do servidor");
-        port = ler.nextInt();
-        
-        Client cliente = new Client(serverName, port);
-        
-        cliente.showp();
-        
-        
-    }
-
     public Client(String serverName, int serverPort) {
         try {
 
@@ -39,13 +18,7 @@ public class Client implements ClientInterface {
      
             Registry registry = LocateRegistry.getRegistry(serverPort);
             this.servicoRemoto = (PartRepositoryInterface) registry.lookup(serverName);
-            //Part part = new Part("teste1", "testeteste", 1, true);
-            //  servicoRemoto.addPart(part); // precisa implementar isso
-
-            //Part teste = servicoRemoto.getPart(1);
-            //System.out.printf(teste.getNome());
-            //servicoRemoto.addListener(clientDistribuido);
-            System.out.println("Cliente Online!");
+            
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -53,7 +26,7 @@ public class Client implements ClientInterface {
 
     @Override
     public void bind(String repositoryName) throws RemoteException {
-        
+       
     }
 
     @Override
@@ -101,7 +74,7 @@ public class Client implements ClientInterface {
 
     @Override
     public void addp(Part p) throws RemoteException {
-        p.componentes = this.pecaAtual.componentes;
+        //p.componentes = this.pecaAtual.componentes;
         this.servicoRemoto.addPart(p); //To change body of generated methods, choose Tools | Templates.
     }
 
