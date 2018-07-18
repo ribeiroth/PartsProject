@@ -4,30 +4,54 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.time.Clock;
 import java.util.*;
 
 public class Client implements ClientInterface {
 
     public PartRepositoryInterface servicoRemoto;
-    public Part pecaAtual;
+    public static Part pecaAtual;
+    
 
     public static void main(String[] args) throws RemoteException {
         
         Scanner ler = new Scanner(System.in);
         String serverName;
-        int port;
+        int port, option;
         
         System.out.println("Olá, vamos começar com a nossa conexão!");
-        
         System.out.println("Primeiro digite o nome do servidor que deseja se conectar");
         serverName = ler.next();
-        
         System.out.println("Boa! Agora digite a porta do servidor");
         port = ler.nextInt();
-        
         Client cliente = new Client(serverName, port);
         
-        cliente.showp();
+//        cliente.showp();
+
+        while(true){
+            System.out.println("Digite 1 para Criar uma peça!");
+            option = ler.nextInt();
+                   switch (option) {
+            case 1:  System.out.println("");
+                     System.out.println("Digite o nome da peça\n");
+                     String pecaNome = ler.next();
+                     System.out.println("Digite a descrição da peça\n");
+                     String descricao = ler.next();
+                     System.out.println("Digite a quantidade  de peça\n");
+                     int quantidade = ler.nextInt();
+                     Part part = new Part(pecaNome, descricao, quantidade);
+                     cliente.addp(part);
+                     break;
+            case 2:  for (Part p : cliente.listp()) {
+                     cliente.pecaAtual = p;
+                     cliente.showp();
+                }
+                     break;
+            default: System.out.println("");
+                     System.out.println("Opção inválida\n");
+                     break;
+        }
+        }
         
         
     }
@@ -101,7 +125,6 @@ public class Client implements ClientInterface {
 
     @Override
     public void addp(Part p) throws RemoteException {
-        p.componentes = this.pecaAtual.componentes;
         this.servicoRemoto.addPart(p); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -109,5 +132,7 @@ public class Client implements ClientInterface {
     public void quit(String repositoryName) throws RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+
 
 }
