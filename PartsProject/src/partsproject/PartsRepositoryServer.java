@@ -14,7 +14,8 @@ public class PartsRepositoryServer {
   //TO DO: MELHORAR MENSAGEM COM NOME DO SERVER
   public PartsRepositoryServer(String name, int port) throws AlreadyBoundException{
     try {
-         System.out.printf("Entrou");
+        
+        System.out.println("Criando Server Repository...");
         ServerName = name;
         ServerPort = port;
 
@@ -23,7 +24,9 @@ public class PartsRepositoryServer {
 
         Registry registry = LocateRegistry.createRegistry(ServerPort);
         registry.bind(ServerName, repoDist);
-        System.out.printf("Server disponivel: %s%n", newRepo);
+        
+        System.out.println("Server "+ name +" disponivel na porta "+ port+"!" );
+        
     }catch (RemoteException ex) {
             System.out.println("Houve um erro: " + ex.getMessage());
       }
