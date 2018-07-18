@@ -26,5 +26,7 @@ public interface ClientInterface extends Remote{
     public void addp (Part p) throws RemoteException; //Adiciona uma peça ao repositório atual. A lista de subpeças atual é usada com lista de subcomponentes diretos da nova peça. (É só para isto que existe a lista de subpeças atual.)
     
     public void quit (String repositoryName) throws RemoteException; //
+    
+    public void getRepositoryName() throws RemoteException;
       
 }

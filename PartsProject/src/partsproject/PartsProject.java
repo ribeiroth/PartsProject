@@ -6,6 +6,7 @@
 package partsproject;
 
 import java.rmi.AlreadyBoundException;
+import java.rmi.RemoteException;
 import java.util.Scanner;
 import java.util.Vector;
 
@@ -14,9 +15,8 @@ public class PartsProject {
     /**
      * @param args the command line arguments
      * 
-     */
-    
-    public static void main(String[] args) throws AlreadyBoundException {
+     */    
+    public static void main(String[] args) throws AlreadyBoundException, RemoteException {
         
        Scanner ler = new Scanner(System.in);
        int port;

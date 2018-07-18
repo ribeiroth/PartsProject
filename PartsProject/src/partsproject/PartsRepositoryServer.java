@@ -24,7 +24,6 @@ public class PartsRepositoryServer {
 
         Registry registry = LocateRegistry.createRegistry(ServerPort);
         registry.bind(ServerName, repoDist);
-        registry.bind("Teste", repoDist);
         
         
         System.out.println("Server "+ name +" disponivel na porta "+ port+"!" );

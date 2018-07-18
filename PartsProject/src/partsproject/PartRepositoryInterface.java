@@ -17,7 +17,7 @@ public interface PartRepositoryInterface extends Remote {
   
   public String getList() throws RemoteException;
 
-  public int size()  throws RemoteException;
+  public int size() throws RemoteException;
   
   public void ClearRepository() throws RemoteException;
     
