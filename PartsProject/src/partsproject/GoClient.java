@@ -74,13 +74,16 @@ public class GoClient {
                     case 6: {
                         System.out.println("Digite o código da peça:");
                         cliente.searchPartById(ler.nextInt());
+                        break;
+                        
                     }
                     case 7: {
                         System.out.println("Digite o nome do Repositório:");
                         String nome = ler.next();
-                         System.out.println("Digite o número d aporta:\n");
+                         System.out.println("Digite 22o número da porta:\n");
                         int porta = ler.nextInt();
                       cliente.bind(cliente, nome, porta);
+                      break;
                     }
                 }
             } catch (Exception e) {
