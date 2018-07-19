@@ -15,12 +15,15 @@ public class Client implements ClientInterface {
     protected Part pecaAtual;
     protected String serverName;
     protected int serverPort;
+    protected List listPort;
 
     public Client(String serverName, int serverPort) {
         try {
             this.serverName = serverName;
             this.serverPort = serverPort;
-
+            List list = new ArrayList();
+            list.add(serverPort);
+            this.listPort = list;
             System.out.printf("Estabelecendo conexão...");
 
             Registry registry = LocateRegistry.getRegistry(serverPort);
@@ -42,19 +45,23 @@ public class Client implements ClientInterface {
     public void setRepositoryPort(int port) {
         this.serverPort = port;
     }
-    public void setRemoteService(String nome ,int port) throws RemoteException {
+
+    public void setRemoteService(String nome, int port) throws RemoteException {
+        this.listPort.add(port);
         Registry registry = LocateRegistry.getRegistry(port);
-         System.out.println(Arrays.toString(registry.list())); 
+        System.out.println(Arrays.toString(registry.list()));
         try {
             this.servicoRemoto = (PartRepositoryInterface) registry.lookup(nome);
-              System.out.println("foi\n");
+            System.out.println("foi\n");
         } catch (NotBoundException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
-   }
-    public int countParts() throws RemoteException  {
+    }
+
+    public int countParts() throws RemoteException {
         return this.servicoRemoto.size();
     }
+
     @Override
     public void bind(Client c, String repositoryName, int port) throws RemoteException, AccessException {
         System.out.println("Repositorio Atual\n");
@@ -68,14 +75,16 @@ public class Client implements ClientInterface {
     }
 
     public void searchPartById(int id) throws RemoteException, NotBoundException {
-        Registry registry = LocateRegistry.getRegistry(this.serverPort);
-        String[] list = registry.list();
-        for (String host : list) {
-                System.out.println("Repositorios \n" + host);
-            PartRepositoryInterface part = (PartRepositoryInterface) registry.lookup(host);
-            if (part.getPart(id).nome != null) {
-                System.out.println("A peça está no Repositório: " + host);
-                break;
+        for (int i = 0; i < this.listPort.size(); i++) {
+            int port = (int) this.listPort.get(i);
+            Registry registry = LocateRegistry.getRegistry(port);
+            String[] list = registry.list();
+            for (String host : list) {
+                PartRepositoryInterface part = (PartRepositoryInterface) registry.lookup(host);
+                if (part.getPart(id).nome != null) {
+                    System.out.println("A peça está no Repositório: " + host);
+                    break;
+                }
             }
         }
     }
