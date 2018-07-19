@@ -75,6 +75,7 @@ public class Client implements ClientInterface {
     }
 
     public void searchPartById(int id) throws RemoteException, NotBoundException {
+        boolean achou = false;
         for (int i = 0; i < this.listPort.size(); i++) {
             int port = (int) this.listPort.get(i);
             Registry registry = LocateRegistry.getRegistry(port);
@@ -83,9 +84,13 @@ public class Client implements ClientInterface {
                 PartRepositoryInterface part = (PartRepositoryInterface) registry.lookup(host);
                 if (part.getPart(id).nome != null) {
                     System.out.println("A peça está no Repositório: " + host);
+                    achou = true;
                     break;
                 }
             }
+        }
+        if(!achou){
+            System.out.println("Peça não encontrada!");
         }
     }
 
