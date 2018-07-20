@@ -2,6 +2,7 @@ package partsproject;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.Map;
 
 /**
  *
@@ -20,5 +21,6 @@ public interface PartRepositoryInterface extends Remote {
   public int size() throws RemoteException;
   
   public void ClearRepository() throws RemoteException;
-    
+  
+  public Map<String,Integer> GetHosts() throws RemoteException;
 }

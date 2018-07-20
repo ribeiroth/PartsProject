@@ -19,12 +19,12 @@ public class PartsRepositoryServer {
         ServerName = name;
         ServerPort = port;
 
-        PartRepositoryInterface newRepo = new PartRepository(name);
+        PartRepositoryInterface newRepo = new PartRepository(name, port);
         PartRepositoryInterface repoDist = (PartRepositoryInterface) UnicastRemoteObject.exportObject(newRepo, 0);
 
         Registry registry = LocateRegistry.createRegistry(ServerPort);
         registry.bind(ServerName, repoDist);
-        
+      
         
         System.out.println("Server "+ name +" disponivel na porta "+ port+"!" );
         

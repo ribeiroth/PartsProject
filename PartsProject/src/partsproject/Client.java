@@ -45,48 +45,61 @@ public class Client implements ClientInterface {
     public void setRepositoryPort(int port) {
         this.serverPort = port;
     }
-    public void setRemoteService(String nome ,int port) throws RemoteException {
+
+    public void setRemoteService(String nome, int port) throws RemoteException {
         this.listPort.add(port);
         Registry registry = LocateRegistry.getRegistry(port);
-         System.out.println(Arrays.toString(registry.list())); 
+        System.out.println(Arrays.toString(registry.list()));
         try {
             this.servicoRemoto = (PartRepositoryInterface) registry.lookup(nome);
-              System.out.println("foi\n");
+            System.out.println("foi\n");
         } catch (NotBoundException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
-   }
-    public int countParts() throws RemoteException  {
+    }
+
+    public int countParts() throws RemoteException {
         return this.servicoRemoto.size();
     }
-    @Override
-    public void bind(Client c, String repositoryName, int port) throws RemoteException, AccessException {
-        System.out.println("Repositorio Atual\n");
-        c.getRepositoryName();
-        c.setRemoteService(repositoryName, port);
-        c.setRepositoryName(repositoryName);
-        System.out.println("Repositorio novo");
-        c.getRepositoryName();
-        c.setRepositoryPort(port);
 
+    @Override
+    public void bind(String repositoryName) throws RemoteException, AccessException {
+        try {
+
+            int port = this.servicoRemoto.GetHosts().get(repositoryName);
+
+            Registry registry = LocateRegistry.getRegistry(port);
+            this.servicoRemoto = (PartRepositoryInterface) registry.lookup(repositoryName);
+
+            this.serverPort = port;
+            this.serverName = repositoryName;
+
+        } catch (NotBoundException ex) {
+            System.out.println("Não foi possível realizar a mudança");
+        }
     }
 
     public void searchPartById(int id) throws RemoteException, NotBoundException {
         boolean achou = false;
-        for (int i = 0; i < this.listPort.size(); i++) {
-            int port = (int) this.listPort.get(i);
-            Registry registry = LocateRegistry.getRegistry(port);
-            String[] list = registry.list();
-            for (String host : list) {
+        for (String host : this.servicoRemoto.GetHosts().keySet()) {
+
+            try {
+                System.out.print(host);
+                Registry registry = LocateRegistry.getRegistry(this.servicoRemoto.GetHosts().get(host));
                 PartRepositoryInterface part = (PartRepositoryInterface) registry.lookup(host);
-                if (part.getPart(id).nome != null) {
+                System.out.print(part.getName());
+                
+                if (part.getPart(id).nome != ""){
                     System.out.println("A peça está no Repositório: " + host);
                     achou = true;
                     break;
                 }
+                
+            }catch (NotBoundException ex){
+                System.out.println("A peça");
             }
         }
-        if(!achou){
+        if (!achou) {
             System.out.println("Peça não encontrada!");
         }
     }
@@ -125,7 +138,7 @@ public class Client implements ClientInterface {
 
     @Override
     public void clearlist() throws RemoteException {
-        this.servicoRemoto.ClearRepository();
+        this.pecaAtual.componentes.clear();
     }
 
     @Override
@@ -133,7 +146,7 @@ public class Client implements ClientInterface {
         if (this.pecaAtual != null) {
             Part novaPeca = this.pecaAtual;
             novaPeca.quantidade = n;
-            this.servicoRemoto.addPart(novaPeca);
+            this.pecaAtual.insertComponent(novaPeca);
         } else {
             System.out.println("Selecione uma peça primeiro!");
         }
@@ -141,13 +154,16 @@ public class Client implements ClientInterface {
 
     @Override
     public void addp(Part p) throws RemoteException {
-        //p.componentes = this.pecaAtual.componentes;
+        if (this.pecaAtual != null) {
+            for (Part pe : this.pecaAtual.componentes) {
+                p.insertComponent(pe);
+            }
+        }
         this.servicoRemoto.addPart(p); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void quit(String repositoryName) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.servicoRemoto.ClearRepository();
     }
-
 }

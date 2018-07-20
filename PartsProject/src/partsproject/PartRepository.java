@@ -8,15 +8,23 @@ public class PartRepository implements PartRepositoryInterface {
   
   private String respositoryName;
   private Vector<Part> partList;
+  private static Map<String,Integer> Hosts = new HashMap<String,Integer>();
   
-  public PartRepository(Part[] parts, String name) {
+  public PartRepository(Part[] parts, String name, int port) {
     respositoryName = name;
     partList = new Vector<Part>(Arrays.asList(parts));
+    this.Hosts.put(name, port);
   }
 
-  public PartRepository(String name) {
+  public PartRepository(String name, int port) {
     respositoryName = name;
     partList = new Vector<Part>();
+    this.Hosts.put(name, port);
+    System.out.print("Deu certo?: " + this.Hosts.get(name));
+  }
+  
+  public Map<String,Integer> GetHosts(){
+      return PartRepository.Hosts;
   }
 
   public void ClearRepository(){

@@ -13,7 +13,7 @@ public interface ClientInterface extends Remote{
     
    
   
-    public void bind(Client c, String repositoryName, int port) throws RemoteException, AccessException ;
+    public void bind(String repositoryName) throws RemoteException, AccessException ;
     
     public String getn ()  throws RemoteException; //Retorna nome do repositório atual.
     
