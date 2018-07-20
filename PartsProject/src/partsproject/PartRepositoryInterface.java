@@ -2,8 +2,6 @@ package partsproject;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
-import java.util.Vector;
 
 /**
  *
@@ -22,10 +20,5 @@ public interface PartRepositoryInterface extends Remote {
   public int size() throws RemoteException;
   
   public void ClearRepository() throws RemoteException;
-  
-  public Vector<String> getHosts() throws RemoteException;
-
-  
-    
     
 }
