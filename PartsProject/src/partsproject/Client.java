@@ -45,23 +45,20 @@ public class Client implements ClientInterface {
     public void setRepositoryPort(int port) {
         this.serverPort = port;
     }
-
-    public void setRemoteService(String nome, int port) throws RemoteException {
+    public void setRemoteService(String nome ,int port) throws RemoteException {
         this.listPort.add(port);
         Registry registry = LocateRegistry.getRegistry(port);
-        System.out.println(Arrays.toString(registry.list()));
+         System.out.println(Arrays.toString(registry.list())); 
         try {
             this.servicoRemoto = (PartRepositoryInterface) registry.lookup(nome);
-            System.out.println("foi\n");
+              System.out.println("foi\n");
         } catch (NotBoundException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-
-    public int countParts() throws RemoteException {
+   }
+    public int countParts() throws RemoteException  {
         return this.servicoRemoto.size();
     }
-
     @Override
     public void bind(Client c, String repositoryName, int port) throws RemoteException, AccessException {
         System.out.println("Repositorio Atual\n");
