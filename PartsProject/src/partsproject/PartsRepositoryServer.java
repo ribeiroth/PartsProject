@@ -1,8 +1,6 @@
 package partsproject;
 
-import java.net.MalformedURLException;
 import java.rmi.AlreadyBoundException;
-import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.registry.*;
 import java.rmi.server.UnicastRemoteObject;
@@ -14,7 +12,7 @@ public class PartsRepositoryServer {
 
   //Cria um server novo;
   //TO DO: MELHORAR MENSAGEM COM NOME DO SERVER
-  public PartsRepositoryServer(String name, int port) throws RemoteException, AlreadyBoundException, MalformedURLException{
+  public PartsRepositoryServer(String name, int port) throws RemoteException, AlreadyBoundException{
     try {
         
         System.out.println("Criando Server Repository...");
@@ -25,7 +23,6 @@ public class PartsRepositoryServer {
         PartRepositoryInterface repoDist = (PartRepositoryInterface) UnicastRemoteObject.exportObject(newRepo, 0);
 
         Registry registry = LocateRegistry.createRegistry(ServerPort);
-        Naming.rebind(ServerName, newRepo);
         registry.bind(ServerName, repoDist);
         
         
