@@ -8,20 +8,29 @@ public class PartRepository implements PartRepositoryInterface {
   
   private String respositoryName;
   private Vector<Part> partList;
+  private static Vector<String> Hosts = new Vector<String>();
   
   public PartRepository(Part[] parts, String name) {
     respositoryName = name;
     partList = new Vector<Part>(Arrays.asList(parts));
+    Hosts.add(name);
+  }
+  
+  @Override
+  public Vector<String> getHosts(){
+      return PartRepository.Hosts;
   }
 
   public PartRepository(String name) {
     respositoryName = name;
     partList = new Vector<Part>();
+    Hosts.add(name);
+    System.out.println(PartRepository.Hosts.get(0));
   }
-
+  
   public void ClearRepository(){
     this.partList.clear();
-}
+  }
 
   public String getName() {
     return respositoryName;

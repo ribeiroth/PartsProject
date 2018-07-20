@@ -1,10 +1,14 @@
 package partsproject;
 
+import java.net.MalformedURLException;
 import java.rmi.AccessException;
+import java.rmi.Naming;
 import java.rmi.NotBoundException;
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -42,41 +46,47 @@ public class Client implements ClientInterface {
     public void setRepositoryPort(int port) {
         this.serverPort = port;
     }
-    public void setRemoteService(String nome ,int port) throws RemoteException {
+
+    public void setRemoteService(String nome, int port) throws RemoteException {
         Registry registry = LocateRegistry.getRegistry(port);
-         System.out.println(Arrays.toString(registry.list())); 
+        System.out.println(Arrays.toString(registry.list()));
         try {
             this.servicoRemoto = (PartRepositoryInterface) registry.lookup(nome);
-              System.out.println("foi\n");
+            System.out.println("foi\n");
         } catch (NotBoundException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
-   }
-    public int countParts() throws RemoteException  {
+    }
+
+    public int countParts() throws RemoteException {
         return this.servicoRemoto.size();
     }
+
     @Override
     public void bind(Client c, String repositoryName, int port) throws RemoteException, AccessException {
-        System.out.println("Repositorio Atual\n");
-        c.getRepositoryName();
-        c.setRemoteService(repositoryName, port);
-        c.setRepositoryName(repositoryName);
-        System.out.println("Repositorio novo");
-        c.getRepositoryName();
-        c.setRepositoryPort(port);
+        try {
+            /*System.out.println("Repositorio Atual\n");
+            c.getRepositoryName();
+            c.setRemoteService(repositoryName, port);
+            c.setRepositoryName(repositoryName);
+            System.out.println("Repositorio novo");
+            c.getRepositoryName();
+            c.setRepositoryPort(port);*/
+            
+            this.servicoRemoto = (PartRepositoryInterface) Naming.lookup(repositoryName);
+        } catch (NotBoundException ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }
 
-    public void searchPartById(int id) throws RemoteException, NotBoundException {
-        Registry registry = LocateRegistry.getRegistry(this.serverPort);
-        String[] list = registry.list();
-        for (String host : list) {
-                System.out.println("Repositorios \n" + host);
-            PartRepositoryInterface part = (PartRepositoryInterface) registry.lookup(host);
-            if (part.getPart(id).nome != null) {
-                System.out.println("A peça está no Repositório: " + host);
-                break;
-            }
+    public void searchPartById(int id) throws RemoteException, AccessException {
+        PartRepositoryInterface newRepo = new PartRepository("tmp");
+        for (String host : this.servicoRemoto.getHosts()) {
+            //GET registry
+
         }
     }
 
@@ -114,7 +124,7 @@ public class Client implements ClientInterface {
 
     @Override
     public void clearlist() throws RemoteException {
-        this.servicoRemoto.ClearRepository();
+        this.pecaAtual.componentes.clear();
     }
 
     @Override
@@ -122,7 +132,7 @@ public class Client implements ClientInterface {
         if (this.pecaAtual != null) {
             Part novaPeca = this.pecaAtual;
             novaPeca.quantidade = n;
-            this.servicoRemoto.addPart(novaPeca);
+            this.pecaAtual.insertComponent(novaPeca);
         } else {
             System.out.println("Selecione uma peça primeiro!");
         }
@@ -130,13 +140,17 @@ public class Client implements ClientInterface {
 
     @Override
     public void addp(Part p) throws RemoteException {
-        //p.componentes = this.pecaAtual.componentes;
+        if (this.pecaAtual != null) {
+            for (Part pe : this.pecaAtual.componentes) {
+                p.insertComponent(pe);
+            }
+        }
         this.servicoRemoto.addPart(p); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void quit(String repositoryName) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.servicoRemoto.ClearRepository();
     }
 
 }

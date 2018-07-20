@@ -32,7 +32,7 @@ public class GoClient {
         
         System.out.println("Digite o código da operação que deseja realizar:");
         
-        int cod;
+        int cod, crt;
         do {
             System.out.println("\n1 - Exibir nome do repositório\n"
             + "2 - Exibir número de peças no repositório\n"
@@ -57,8 +57,30 @@ public class GoClient {
                         Part p = cliente.getp(ler.nextInt());
                         if(p != null){ 
                             System.out.println(p.nome);
+                            System.out.println("1 - Adicionar essa peça a lista subpeças");
+                            System.out.println("2 - Exibir atributos");
+                            System.out.println("3 - Limpar SubComponentes");
+                            System.out.println("0 - Sair");
+                            do{
+                                crt = ler.nextInt();
+                                switch(crt) {
+                                    case 1: {
+                                        System.out.println("Digite a quantidade:");
+                                        int qtde = ler.nextInt();
+                                        cliente.addsubpart(qtde);
+                                    };
+                                    case 2: {
+                                        cliente.showp();
+                                    } 
+                                    case 3: {
+                                        cliente.clearlist();
+                                    } 
+                                }
+                            }while(crt != 0);
+                            
+                            
                         }else{ 
-                            System.out.println(p.nome);
+                            System.out.println("Peça não encontrada!");
                         };
                         break;
                     }
